@@ -1,3 +1,11 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+
+  # API V1
+  host_regex = DomainHelper.needs_api_subdomain? ? '^api' : ''
+  constraints host: /#{host_regex}/ do
+    namespace :v1, defaults: { format: :json } do
+      get '/', to: 'index#yoyo'
+    end
+  end
+
 end

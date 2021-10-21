@@ -96,6 +96,10 @@ GEM
     jsonapi-renderer (0.2.2)
     jsonapi-serializable (0.3.1)
       jsonapi-renderer (~> 0.2.0)
+    launchy (2.5.0)
+      addressable (~> 2.7)
+    letter_opener (1.7.0)
+      launchy (~> 2.2)
     listen (3.7.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -241,6 +245,7 @@ DEPENDENCIES
   byebug
   capybara (>= 3.26)
   jsonapi-rails
+  letter_opener
   listen (~> 3.3)
   pg (~> 1.1)
   puma (~> 5.0)
