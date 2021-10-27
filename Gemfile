@@ -22,6 +22,9 @@ gem 'jsonapi-rails'
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
+gem 'devise'
+gem 'devise-jwt'
+gem 'rack-cors'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
@@ -34,6 +37,8 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec',  '~> 3.0'
   gem 'rspec-rails', '~> 5.0.0'
+  gem 'factory_bot_rails'
+  gem 'dotenv-rails'
 end
 
 group :development do

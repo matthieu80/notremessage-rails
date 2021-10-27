@@ -1,5 +1,5 @@
 module V1
-  class IndexController < ApplicationController
+  class IndexController < ApiController
     def yoyo
       render json: {yiyi: 1}
     end
