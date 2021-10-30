@@ -8,6 +8,7 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
   config.secret_key = '4e625aa5555a64777b15049773279046d6d8a2c85c329c94ccf29d113db37a31c5c31188fd05d1918a69b3b3c117746e147a3a48fa98bc46aeced95e01f08d75'
+  config.secret_token = SecureRandom.hex(64)
 
   config.cache_classes = false
   config.action_view.cache_template_loading = true
