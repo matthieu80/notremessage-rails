@@ -18,6 +18,7 @@ jobs:
           POSTGRES_USER: circleci-demo-ruby
           POSTGRES_DB: notremessage-docker-test
           POSTGRES_PASSWORD: ""
+          DEVISE_JWT_SECRET_KEY: fca6474af8e2e16242fjugyf127f6f0daec539447649eef1c816c97be21fe37372c7032d84f88a311869f00ab025711763dd4ec165f9f3df59edb78b00358818bf
     executor: ruby/default
     steps:
       - checkout
