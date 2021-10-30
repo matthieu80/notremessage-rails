@@ -2,7 +2,6 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
 
-  # devise_for :users
   # devise_for :users, controllers: {
   #   sessions: 'sessions',
   #   registrations: 'registrations',
@@ -16,7 +15,7 @@ Rails.application.routes.draw do
     sessions: 'sessions',
     registrations: 'registrations',
     confirmations: 'confirmations',
-  #   passwords: 'passwords',
+  # passwords: 'passwords',
   }
 
   # API V1
