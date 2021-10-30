@@ -22,5 +22,7 @@ module NotremessageRails
     config.active_job.queue_adapter = :sidekiq
     Sidekiq.configure_server { |c| c.redis = { url: ENV['REDIS_URL'] } }
 
+    config.middleware.use Rack::Session::Cookie, secret: File.read(".session.key"), same_site: true, max_age: 86400
+    # run Sidekiq::Web
   end
 end
