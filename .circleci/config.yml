@@ -13,6 +13,8 @@ jobs:
   build:
     docker:
       - image: circleci/ruby:2.6.5-stretch-node
+        environment:
+          SECRET_KEY_BASE: abcd1234
       - image: circleci/postgres:9.5-alpine # database image
         environment: # environment variables for database
           POSTGRES_USER: circleci-demo-ruby
