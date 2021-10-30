@@ -9,5 +9,5 @@ RSpec.describe Card, type: :model do
   # validations
   it { should validate_presence_of(:title) }
   it { should validate_presence_of(:recipient_name) }
-  it { should validate_presence_of(:recipient_email) }
+  # it { should validate_presence_of(:recipient_email) }
 end

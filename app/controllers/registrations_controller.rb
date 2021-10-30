@@ -21,8 +21,9 @@ class RegistrationsController < Devise::RegistrationsController
         recipient_name: params[:card][:recipient_name],
         group_name: params[:card][:group_name],
         title: params[:card][:title],
+        owner_id: resource.id
       )
-      UserCard.create(card: card, user: resource, owner: true)
+      UserCard.create(card: card, user: resource)
 
       if resource.active_for_authentication?
         sign_up(resource_name, resource)

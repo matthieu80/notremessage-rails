@@ -9,5 +9,4 @@ RSpec.describe UserCard, type: :model do
   # validations
   it { should validate_presence_of(:user_id) }
   it { should validate_presence_of(:card_id) }
-  it { should validate_presence_of(:owner) }
 end
