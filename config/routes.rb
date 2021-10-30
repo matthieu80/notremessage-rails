@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   devise_for :users, defaults: { format: :json }, controllers: {
     sessions: 'sessions',
     registrations: 'registrations',
-  #   confirmations: 'confirmations',
+    confirmations: 'confirmations',
   #   passwords: 'passwords',
   }
 
@@ -24,5 +24,4 @@ Rails.application.routes.draw do
       post 'send', to: 'cards#send'
     end
   end
-
 end
