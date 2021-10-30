@@ -4,4 +4,8 @@ class SerializableUser < JSONAPI::Serializable::Resource
 
   attributes :name, :email
   has_many :cards
+
+  attribute :confirmed do
+    @object.confirmed_at?
+  end
 end

@@ -18,5 +18,9 @@ module NotremessageRails
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    config.active_job.queue_adapter = :sidekiq
+    Sidekiq.configure_server { |c| c.redis = { url: ENV['REDIS_URL'] } }
+
   end
 end
