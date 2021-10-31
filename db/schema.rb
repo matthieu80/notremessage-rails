@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_29_221651) do
+ActiveRecord::Schema.define(version: 2021_10_31_145323) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 2021_10_29_221651) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "group_name"
     t.string "public_id", null: false
+    t.datetime "deleted_at"
     t.index ["owner_id"], name: "index_cards_on_owner_id"
     t.index ["public_id"], name: "index_cards_on_public_id", unique: true
   end

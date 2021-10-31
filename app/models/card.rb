@@ -8,6 +8,8 @@ class Card < ApplicationRecord
 
   before_create :generate_public_id
 
+  scope :not_deleted, -> { where(deleted_at: nil) }
+
   def generate_public_id
     return if public_id
 
