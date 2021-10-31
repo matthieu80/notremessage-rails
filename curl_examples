@@ -1,0 +1,17 @@
+
+signup:
+curl -X POST -H "Content-Type: application/json" -d '{"user": {"name": "linuxize", "password": "fqwfqwfw", "email": "fwfejoi@wuhkygkpoief.lflfwcekkpvvffddcskdfhiuvcvdcfwvdvfefr"}, "card": {"title": "frfr", "recipient_name": "wfewef", "group_name": "fwef"}}' -v -H 'Cache-Control: no-cache' http://localhost:3000/users
+
+
+login:
+curl -X POST -H "Content-Type: application/json" -d '{"user": {"name": "linuxize", "password": "fqwfqwfw", "email": "fwfeejoi@oifjjiojiwuhkygkpoief.lflfwcekkpvvffddcskdfhiuvcvdcfwvdvfefr"}}' -v http://localhost:3000/users/sign_in
+
+logout:
+curl -X DELETE -H "Content-Type: application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJmMTYzNjIxMC01ZmM4LTQxY2EtOWU2Ny04OWE2YjE5YTQ2NGMiLCJzdWIiOiIxIiwic2NwIjoidXNlciIsImF1ZCI6bnVsbCwiaWF0IjoxNjM1MzMxNDUxLCJleHAiOjE2MzUzMzMyNTF9.uuUJQVJSAUexPFxKzUwIqkmM4nnIZsi1t_UnvOAJSA4" http://localhost:3000/users/sign_out
+
+url to get email to receive password (password forgotten):
+curl -X POST -H "Content-Type: application/json" -d '{"user": {"email": "fwfejoi@wuhkygkpoief.lf"}}' http://localhost:3000/users/password
+-> email contient link to http://localhost:3000/users/password/edit?reset_password_token=TDhUKy-iCxCoZhCpRyzy
+-> once on the form, contact server with new password on:
+curl -X PUT -H "Content-Type: application/json" -d '{"user": {"password": "pizzaioloroberto"}}' http://localhost:3000/users/password?reset_password_token=TDhUKyiCxCoZhCpRyzyc
+

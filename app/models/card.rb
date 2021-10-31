@@ -2,6 +2,8 @@ class Card < ApplicationRecord
   has_many :user_cards
   has_many :users, through: :user_cards
 
+  belongs_to :owner, class_name: 'User'
+
   validates_presence_of :title, :recipient_name, :owner_id
 
   before_create :generate_public_id

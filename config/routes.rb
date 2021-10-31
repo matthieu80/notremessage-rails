@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     sessions: 'sessions',
     registrations: 'registrations',
     confirmations: 'confirmations',
-  # passwords: 'passwords',
+    passwords: 'passwords',
   }
 
   # API V1
