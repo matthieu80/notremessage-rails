@@ -26,7 +26,7 @@ class RegistrationsController < Devise::RegistrationsController
     else
       clean_up_passwords resource
       set_minimum_password_length
-      render jsonapi_errors: errors
+      render jsonapi_errors: errors, status: :unprocessable_entity
     end
   end
 

@@ -8,6 +8,9 @@ class SessionsController < Devise::SessionsController
     sign_in(resource_name, resource)
     yield resource if block_given?
 
-    render json: {yoyo: 'hihihi'}
+    render jsonapi: resource,
+      include: [:cards],
+      fields: { users: [:name, :email] },
+      status: :created
   end
 end

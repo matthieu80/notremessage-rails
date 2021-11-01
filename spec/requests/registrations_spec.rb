@@ -20,6 +20,11 @@ describe 'RegistrationsController' do
     describe 'Valid requests' do
       it 'should return an Authorization headers' do
         post '/users', params: valid_params.to_json, headers: headers
+        expect(response).to have_http_status(:created)
+      end
+
+      it 'should return an Authorization headers' do
+        post '/users', params: valid_params.to_json, headers: headers
         expect(response.headers['Authorization']).not_to be_empty
       end
 
@@ -91,6 +96,11 @@ describe 'RegistrationsController' do
           }
         end
 
+        it 'should return unprocessable_entity status' do
+          post '/users', params: invalid_params.to_json, headers: headers
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
         it 'should return error with detail' do
           post '/users', params: invalid_params.to_json, headers: headers
           json = JSON.parse(response.body)
@@ -115,6 +125,11 @@ describe 'RegistrationsController' do
               group_name: "your colleagues"
             }
           }
+        end
+
+        it 'should return unprocessable_entity status' do
+          post '/users', params: invalid_params.to_json, headers: headers
+          expect(response).to have_http_status(:unprocessable_entity)
         end
 
         it 'should return error with detail' do

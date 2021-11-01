@@ -17,7 +17,7 @@ describe 'SessionsController' do
 
       it 'should return an Authorization headers' do
         post '/users/sign_in', params: valid_params.to_json, headers: headers
-        expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:created)
       end
 
       it 'should return an Authorization headers' do
@@ -28,6 +28,23 @@ describe 'SessionsController' do
       it 'should return an Authorization headers starting with Bearer' do
         post '/users/sign_in', params: valid_params.to_json, headers: headers
         expect(/^Bearer /.match(response.headers['Authorization'])).not_to be_nil
+      end
+
+      it 'should return the user' do
+        post '/users/sign_in', params: valid_params.to_json, headers: headers
+        json = JSON.parse(response.body)
+
+        expect(json['data']['type']).to eql 'user'
+        expect(json['data']['attributes']['email']).to eql user.email
+        expect(json['data']['attributes']['name']).to eql user.name
+        expect(json['data']['attributes']['confirmed']).to eql false
+
+        card = user.cards.first
+        expect(json['included'].size).to be 1
+        expect(json['included'].first['type']).to eql 'card'
+        expect(json['included'].first['attributes']['title']).to eql card.title
+        expect(json['included'].first['attributes']['recipient_name']).to eql card.recipient_name
+        expect(json['included'].first['attributes']['group_name']).to eql card.group_name
       end
     end
 
