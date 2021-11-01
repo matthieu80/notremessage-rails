@@ -45,7 +45,7 @@ describe 'ConfirmationsController' do
     end
 
     describe 'Valid request' do
-      it ''do
+      it 'should return unprocessable_entity status with error' do
         get "/users/confirmation?confirmation_token=wrong_token", headers: headers
         
         expect(response).to have_http_status(:unprocessable_entity)
