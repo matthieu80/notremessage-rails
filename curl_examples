@@ -1,6 +1,6 @@
 
 signup:
-curl -X POST -H "Content-Type: application/json" -d '{"user": {"name": "linuxize", "password": "fqwfqwfw", "email": "fwfejoddidd@wuoief.lfr"}, "card": {"title": "frfr", "recipient_name": "wfewef", "group_name": "fwef"}}' -v -H 'Cache-Control: no-cache' http://localhost:3000/users
+curl -X POST -H "Content-Type: application/json" -d '{"user": {"name": "linuxize", "password": "fqwfqwfw", "email": "fwvsdfejoddildd@wuoief.lfr"}, "card": {"title": "frfr", "recipient_name": "wfewef", "group_name": "fwef"}}' -v -H 'Cache-Control: no-cache' http://localhost:3000/users
 
 
 login:
@@ -15,7 +15,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"user": {"email": "fwfejoi
 -> once on the form, contact server with new password on:
 curl -X PUT -H "Content-Type: application/json" -d '{"user": {"password": "pizzaioloroberto"}}' http://localhost:3000/users/password?reset_password_token=TDhUKyiCxCoZhCpRyzyc
 -> note: ici on pourrait avoir password_confirmation aussi (le formpeut etre utilise a la fois pour 
-forgotten password, mais aussi change password, et ds ce deuxieme cas il peut etre mieux d avoir une confirmation)
+forgotten password, mais aussi change password (en fait ca sera dans le user profile), et ds ce deuxieme cas il peut etre mieux d avoir une confirmation)
 
 Magic link:
 Quand le authorization bearer n'est pas present sur le FE, on le choppe si il est retourne par BE.

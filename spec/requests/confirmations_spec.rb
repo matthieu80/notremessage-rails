@@ -29,4 +29,29 @@ describe 'ConfirmationsController' do
       expect(body).to include("/users/confirmation?confirmation_token=#{confirmation_token}")
     end
   end
+
+  describe 'GET /users/confirmation' do
+    describe 'Valid request' do
+      it 'confirms the user' do
+        expect do
+          get "/users/confirmation?confirmation_token=#{user.confirmation_token}", headers: headers
+        end.to change { user.reload.confirmed? }.from(false).to(true)
+      end
+
+      it 'returns an ok status' do
+        get "/users/confirmation?confirmation_token=#{user.confirmation_token}", headers: headers
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    describe 'Valid request' do
+      it ''do
+        get "/users/confirmation?confirmation_token=wrong_token", headers: headers
+        
+        expect(response).to have_http_status(:unprocessable_entity)
+        json = JSON.parse(response.body)
+        expect(json['confirmation_token'].first).to eq 'is invalid'
+      end
+    end
+  end
 end
