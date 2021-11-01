@@ -161,11 +161,4 @@ describe 'RegistrationsController' do
       end
     end
   end
-
-  def headers
-    {
-      'ACCEPT' => 'application/json',
-      'CONTENT_TYPE' => 'application/json',
-    }
-  end
 end
