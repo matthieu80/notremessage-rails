@@ -11,22 +11,18 @@ class PasswordsController < Devise::PasswordsController
 
     if resource.errors.empty?
       resource.unlock_access! if unlockable?(resource)
-      if Devise.sign_in_after_reset_password
-        flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
-        set_flash_message!(:notice, flash_message)
-        resource.after_database_authentication
-        sign_in(resource_name, resource)
-        head :ok
-      else
-        set_flash_message!(:notice, :updated_not_active)
-        head :ok
-      end
-      # respond_with resource, location: after_resetting_password_path_for(resource)
-      head :ok
+      flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
+      set_flash_message!(:notice, flash_message)
+      resource.after_database_authentication
+      sign_in(resource_name, resource)
+
+      render jsonapi: resource,
+        include: [:cards],
+        fields: { users: [:name, :email] },
+        status: :created
     else
       set_minimum_password_length
-      # respond_with resource
-      head :ok
+      render jsonapi_errors: resource.errors, status: :unprocessable_entity
     end
   end
 end

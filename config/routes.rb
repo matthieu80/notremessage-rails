@@ -2,13 +2,6 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
 
-  # devise_for :users, controllers: {
-  #   sessions: 'sessions',
-  #   registrations: 'registrations',
-  #   confirmations: 'confirmations',
-  #   omniauth_callbacks: 'users/omniauth_callbacks',
-  #   passwords: 'passwords',
-  # }
   mount Sidekiq::Web => '/sidekiq'
   
   devise_for :users, defaults: { format: :json }, controllers: {

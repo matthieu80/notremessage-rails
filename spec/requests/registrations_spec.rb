@@ -104,7 +104,6 @@ describe 'RegistrationsController' do
         it 'should return error with detail' do
           post '/users', params: invalid_params.to_json, headers: headers
           json = JSON.parse(response.body)
-          {"errors"=>[{"title"=>"Invalid name", "detail"=>"Name can't be blank", "source"=>{}}], "jsonapi"=>{"version"=>"1.0"}}
 
           expect(json['errors'].size).to be 1
           expect(json['errors'].first['title']).to eq 'Invalid name'
