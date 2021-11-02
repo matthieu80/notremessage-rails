@@ -8,8 +8,13 @@ Rails.application.routes.draw do
     sessions: 'sessions',
     registrations: 'registrations',
     confirmations: 'confirmations',
-    passwords: 'passwords',
+    passwords: 'passwords'
   }
+
+  devise_scope :user do
+    post '/magic_links', to: 'sessions#send_magic_link_email'
+    get '/magic_links/verify', to: 'sessions#magic_link_verify'
+  end
 
   # API V1
   host_regex = DomainHelper.needs_api_subdomain? ? '^api' : ''
@@ -18,7 +23,6 @@ Rails.application.routes.draw do
       resources :messages, only: [:create, :update, :destroy]
       resources :cards, except: [:new, :edit]
       post 'send', to: 'cards#send'
-      resources :magic_links, only: [:create, :show]
     end
   end
 end
