@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_31_145323) do
+ActiveRecord::Schema.define(version: 2021_11_02_072709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,15 @@ ActiveRecord::Schema.define(version: 2021_10_31_145323) do
     t.datetime "deleted_at"
     t.index ["owner_id"], name: "index_cards_on_owner_id"
     t.index ["public_id"], name: "index_cards_on_public_id", unique: true
+  end
+
+  create_table "magic_links", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "expired_at", null: false
+    t.string "signature", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["signature"], name: "index_magic_links_on_signature", unique: true
   end
 
   create_table "messages", force: :cascade do |t|

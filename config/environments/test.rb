@@ -55,6 +55,7 @@ Rails.application.configure do
   config.active_support.disallowed_deprecation_warnings = []
 
   config.action_mailer.default_url_options = { host: 'localhost' }
+  config.active_job.queue_adapter = :inline
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true

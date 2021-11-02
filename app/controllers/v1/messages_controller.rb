@@ -10,12 +10,6 @@ module V1
       render json: message
     end
 
-    def show
-      # check authorization of current user on card
-      message = Message.find_by(public_id: params[:public_id])
-      render json: message
-    end
-
     def update
       # check authorization of current user on card
       message = Message.find_by(public_id: params[:public_id])

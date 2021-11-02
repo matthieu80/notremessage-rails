@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       resources :messages, only: [:create, :update, :destroy]
       resources :cards, except: [:new, :edit]
       post 'send', to: 'cards#send'
+      resources :magic_links, only: [:create, :show]
     end
   end
 end
