@@ -5,16 +5,24 @@ module V1
     # this endpoint is used when card is created from dashboard
     # (as opposed as a card created during signup)
     def create
-      # to put in a transaction
-      card = Card.create!(
-        recipient_name: params[:card][:recipient_name],
-        group_name: params[:card][:group_name],
-        title: params[:card][:title],
+      card = current_user.cards.new(
+        recipient_name: card_params[:recipient_name],
+        group_name: card_params[:group_name],
+        title: card_params[:title],
         owner_id: current_user.id
       )
-      UserCard.create!(card: card, user: current_user)
 
-      render json: card
+      if card.save
+        render jsonapi: card, status: :created
+      else
+        render jsonapi_errors: card.errors, status: :unprocessable_entity
+      end
+    end
+
+    # dashboard
+    def index
+      cards = current_user.cards
+      render jsonapi: cards, status: :ok
     end
 
     def show
@@ -27,9 +35,9 @@ module V1
       # authorization check for current user
       card = Card.find_by(public_id: params[:public_id])
       card = Card.update!(
-        recipient_name: params[:card][:recipient_name],
-        group_name: params[:card][:group_name],
-        title: params[:card][:title],
+        recipient_name: card_params[:recipient_name],
+        group_name: card_params[:group_name],
+        title: card_params[:title],
       )
       render json: card
     end
@@ -40,11 +48,17 @@ module V1
       head :no_content
     end
 
-    def send
+    def send_by_email
       # check stripe
       # delayed sending?
       # send email
       # create image from the card
+    end
+
+    private
+
+    def card_params
+      params.require(:card).permit(:recipient_name, :title, :group_name)
     end
   end
 end

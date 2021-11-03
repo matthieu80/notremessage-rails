@@ -21,8 +21,11 @@ Rails.application.routes.draw do
   constraints host: /#{host_regex}/ do
     namespace :v1, defaults: { format: :json } do
       resources :messages, only: [:create, :update, :destroy]
-      resources :cards, except: [:new, :edit]
-      post 'send', to: 'cards#send'
+      resources :cards, except: [:new, :edit] do
+        member do
+          post '/send', to: 'cards#send_by_email'
+        end
+      end
       resources :users, only: [:show, :update]
     end
   end

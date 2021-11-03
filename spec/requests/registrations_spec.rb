@@ -47,22 +47,6 @@ describe 'RegistrationsController' do
         expect(created_card.recipient_name).to eq valid_params[:card][:recipient_name]
         expect(created_card.group_name).to eq valid_params[:card][:group_name]
       end
-
-      it 'should return the user with the card' do
-        post '/users', params: valid_params.to_json, headers: headers
-        json = JSON.parse(response.body)
-
-        expect(json['data']['type']).to eql 'user'
-        expect(json['data']['attributes']['email']).to eql valid_params[:user][:email]
-        expect(json['data']['attributes']['name']).to eql valid_params[:user][:name]
-        expect(json['data']['attributes']['confirmed']).to eql false
-
-        expect(json['included'].size).to be 1
-        expect(json['included'].first['type']).to eql 'card'
-        expect(json['included'].first['attributes']['title']).to eql valid_params[:card][:title]
-        expect(json['included'].first['attributes']['recipient_name']).to eql valid_params[:card][:recipient_name]
-        expect(json['included'].first['attributes']['group_name']).to eql valid_params[:card][:group_name]
-      end
     end
 
     describe 'Invalid requests' do
