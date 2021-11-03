@@ -1,16 +1,14 @@
-3- Change id to public_id in serializers TODO UUID!!!!!!!!!!
+3- Change id to public_id in serializers TODO UUID!!!!!!!!!! TODO1
 
-4- user controller (to change settings) + tests
+4- user controller (to change settings) + tests TODO3
 - name (required)
 - email (required)
 - password
 - password_confirmation (required if password is present)
 
-5- create link to the app into emails
+6- add background column on card table TODO 4
 
-6- add background column on card table
-
-7- cards controller tests
+7- cards controller tests TODO 6
   always need to be owner, except :show
 
 8- messages controller tests
@@ -18,7 +16,9 @@
   - update (on check if immediate_token est le bon. le immediate_token n'est accessible qu'a l'utilisateur qui est toujours sur son pc et est la depuis moins de 2 heures. ce token n'est present que lors de la creation)
   - destroy is only for owner
 
-9- message.name peut etre nil??
+9- message.name peut etre nil?? TODO 5
+message factory
+add specs on message model for name and user_id
 
-10- we should be able to create a user without a card created directly (if somebody writes on a card and signs up, they do not need a card at that point)
+10- we should be able to create a user without a card created directly (if somebody writes on a card and signs up, they do not need a card at that point) TODO2 (change factory to 'user_with_card' trait and change specs)
 
