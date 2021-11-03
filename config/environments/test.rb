@@ -54,6 +54,7 @@ Rails.application.configure do
   # Tell Active Support which deprecation messages to disallow.
   config.active_support.disallowed_deprecation_warnings = []
 
+  # Devise config
   config.action_mailer.default_url_options = { host: 'localhost' }
   config.active_job.queue_adapter = :inline
 
@@ -62,4 +63,7 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+  
+  # website url
+  config.site_url = 'http://localhost:3000'
 end

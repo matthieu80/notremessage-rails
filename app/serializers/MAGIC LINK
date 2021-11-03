@@ -1,22 +1,3 @@
-1- MAGIC LINK
-
-POST /lien-magique
-params: 'email'
-
-Model MagicLink
-  user_id
-  expired_at (1.day)
-  signature (MD5 user_id-expired_at-user_email)
-
--> email sent
-  contains link to /lien-magique avec la signature comme query string
-
-GET /lien-magique
-params: signature
--> returns JWT in headers (change dispatch_requests)
-
-2- magic link model specs
-
 3- Change id to public_id in serializers TODO UUID!!!!!!!!!!
 
 4- user controller (to change settings) + tests

@@ -78,4 +78,7 @@ Rails.application.configure do
   # letter opener
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.perform_deliveries = true
+
+  # website url
+  config.site_url = 'http://localhost:3000'
 end
