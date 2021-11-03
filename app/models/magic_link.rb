@@ -3,6 +3,8 @@ class MagicLink < ApplicationRecord
 
   before_create :generate_expired_at, :generate_signature
 
+  validates_presence_of :user
+
   EXPIRATION_TIME = 24.hours
 
   private

@@ -15,18 +15,29 @@ GET /lien-magique
 params: signature
 -> returns JWT in headers (change dispatch_requests)
 
+2- magic link model specs
 
+3- Change id to public_id in serializers TODO UUID!!!!!!!!!!
 
-2- Change id to public_id in serializers
+4- user controller (to change settings) + tests
+- name (required)
+- email (required)
+- password
+- password_confirmation (required if password is present)
 
-3- user controller (change settings) + tests
+5- create link to the app into emails
 
-4- cards controller tests
+6- add background column on card table
+
+7- cards controller tests
   always need to be owner, except :show
 
-5- messages controller tests
+8- messages controller tests
   - create (everybody, sur creation un immediate_token est renvoye au FE, avec expiration de ce token ~2 hours)
   - update (on check if immediate_token est le bon. le immediate_token n'est accessible qu'a l'utilisateur qui est toujours sur son pc et est la depuis moins de 2 heures. ce token n'est present que lors de la creation)
   - destroy is only for owner
 
-6- message.name peut etre nil??
+9- message.name peut etre nil??
+
+10- we should be able to create a user without a card created directly (if somebody writes on a card and signs up, they do not need a card at that point)
+

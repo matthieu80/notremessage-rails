@@ -106,7 +106,7 @@ describe 'SessionsController' do
   ## MAGIC LINKS
   #
 
-  describe 'POST /v1/magic_links' do
+  describe 'POST /magic_links' do
     describe 'Valid request' do
       let(:params) do
         { 
@@ -161,7 +161,7 @@ describe 'SessionsController' do
     end
   end
 
-  describe 'GET /users/magic_links/verify' do
+  describe 'GET /magic_links/verify' do
     describe 'Valid requests' do
       let(:magic_link) { create(:magic_link, user: user) }
       let(:signature) { magic_link.signature }
