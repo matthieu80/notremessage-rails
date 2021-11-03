@@ -1,8 +1,5 @@
 3- Change id to public_id in serializers TODO UUID!!!!!!!!!! TODO1
 
-7- cards controller tests TODO 6
-  always need to be owner, except :show
-
 8- messages controller tests
   - create (everybody, sur creation un immediate_token est renvoye au FE, avec expiration de ce token ~2 hours)
   - update (on check if immediate_token est le bon. le immediate_token n'est accessible qu'a l'utilisateur qui est toujours sur son pc et est la depuis moins de 2 heures. ce token n'est present que lors de la creation)
@@ -18,8 +15,6 @@ test pour  belongs_to :user, optional: true
 - change tous les endroits ou ya create(:user)
 - dans registration, changer le signup pour qu'un nouveau parametre 'with_card' soit ajouter (verifier sur thankbox si ya pas un meilleur moyen de faire ca)
 
-11- remove public_id columns (but still necessary for card i think??)
+11- remove public_id columns (but still necessary for card i think?? - change to `url`?)
 
 12 - add a deleted_at column on card
-
-13- pourquoi j ai bouge owner: boolean dans usercards? peut etre qu'il faut ca????
