@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       resources :messages, only: [:create, :update, :destroy]
       resources :cards, except: [:new, :edit]
       post 'send', to: 'cards#send'
+      resources :users, only: [:show, :update]
     end
   end
 end
