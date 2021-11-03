@@ -21,30 +21,37 @@ module V1
 
     # dashboard
     def index
-      cards = current_user.cards
+      cards = current_user.owned_cards
       render jsonapi: cards, status: :ok
     end
 
     def show
-      # authorization check for current user
-      card = Card.find_by(public_id: params[:public_id])
-      render json: card
+      card = Card.find(params[:id])
+      render jsonapi: card,
+        include: [:messages],
+        status: :ok
     end
 
     def update
-      # authorization check for current user
-      card = Card.find_by(public_id: params[:public_id])
-      card = Card.update!(
+      card = current_user.cards.find_by(id: params[:id])
+      unless card
+       head(:not_found) and return
+      end
+      if card.update(
         recipient_name: card_params[:recipient_name],
         group_name: card_params[:group_name],
         title: card_params[:title],
       )
-      render json: card
+        render jsonapi: card,
+          include: [:messages],
+          status: :ok
+      else
+        render jsonapi_errors: card.errors, status: :unprocessable_entity
+      end
     end
 
     def destroy
-      # authorization check for current user
-      Card.find_by(public_id: params[:public_id]).destroy
+      current_user.cards.find_by(id: params[:id]).try(:destroy)
       head :no_content
     end
 

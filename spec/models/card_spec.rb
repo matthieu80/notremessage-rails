@@ -6,6 +6,7 @@ RSpec.describe Card, type: :model do
   it { should have_many(:user_cards) }
   it { should have_many(:users) }
   it { should belong_to(:owner) }
+  it { should have_many(:messages) }
 
   # validations
   it { should validate_presence_of(:title) }

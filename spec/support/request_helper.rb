@@ -22,4 +22,9 @@ module RequestHelpers
     auth_headers = user ? Devise::JWT::TestHelpers.auth_headers(headers, user) : {}
     put(url, params: params, headers: headers.merge(auth_headers))
   end
+
+  def delete_with_jwt_token(url, user)
+    auth_headers = user ? Devise::JWT::TestHelpers.auth_headers(headers, user) : {}
+    delete(url, headers: headers.merge(auth_headers))
+  end
 end

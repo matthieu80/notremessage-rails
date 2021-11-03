@@ -1,6 +1,7 @@
 class Card < ApplicationRecord
   has_many :user_cards
   has_many :users, through: :user_cards
+  has_many :messages
 
   belongs_to :owner, class_name: 'User'
 
