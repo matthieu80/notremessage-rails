@@ -1,14 +1,5 @@
 3- Change id to public_id in serializers TODO UUID!!!!!!!!!! TODO1
 
-4- user controller (to change settings) + tests TODO3
-- name (required)
-- email (required)
-- password
-- password_confirmation (required if password is present)
-
-6- add background column on card table TODO 4
-- integer, default to 1
-
 7- cards controller tests TODO 6
   always need to be owner, except :show
 

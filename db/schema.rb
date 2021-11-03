@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 2021_11_02_072709) do
     t.string "recipient_email"
     t.string "title", null: false
     t.integer "owner_id", null: false
+    t.integer "background", default: 1
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "group_name"
