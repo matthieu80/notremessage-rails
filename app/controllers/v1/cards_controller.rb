@@ -27,6 +27,10 @@ module V1
 
     def show
       card = Card.not_deleted.where(path: params[:path]).first
+      unless card
+        head(:not_found) and return
+       end
+      
       render jsonapi: card,
         include: [:messages],
         status: :ok
@@ -51,7 +55,8 @@ module V1
     end
 
     def destroy
-      current_user.cards.not_deleted.find_by(id: params[:id]).try(:destroy)
+      card = current_user.cards.not_deleted.find_by(id: params[:id])
+      card.update(deleted_at: Time.now) if card
       head :no_content
     end
 

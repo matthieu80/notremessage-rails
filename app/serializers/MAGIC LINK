@@ -9,8 +9,6 @@ add specs on message model for name and user_id
 test pour  belongs_to :user, optional: true
 
 10- we should be able to create a user without a card created directly (if somebody writes on a card and signs up, they do not need a card at that point) TODO2 (change factory to 'user_with_card' trait and change specs)
-- add traits in factory (avec card)
-- change tous les endroits ou ya create(:user)
 - dans registration, changer le signup pour qu'un nouveau parametre 'with_card' soit ajouter (verifier sur thankbox si ya pas un meilleur moyen de faire ca)
 
 3- Change id to public_id in serializers TODO UUID!!!!!!!!!! TODO1

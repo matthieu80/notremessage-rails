@@ -100,6 +100,7 @@ describe 'UsersController' do
   describe 'GET /v1/cards' do
     before do
       user.cards.create(title: 'Bon anniv', recipient_name: "Bono", owner: user)
+      user.cards.create(title: 'Au revoir', recipient_name: "Ben", owner: user, deleted_at: Time.now)
     end
 
     describe 'Valid requests' do
@@ -143,32 +144,43 @@ describe 'UsersController' do
 #
 
   describe 'GET /v1/cards/:id' do
-    before do
-      create(:message, card: user.cards.first, user_id: user.id)
+    describe 'Valid request' do
+      before do
+        create(:message, card: user.cards.first, user_id: user.id)
+      end
+
+      it 'shows the card with messages when authenticated' do
+        get_with_jwt_token("/v1/cards/#{user.cards.first.path}", user)
+        json = JSON.parse(response.body)
+
+        expect(json['included'].size).to be 1
+        expect(json['included'].first['type']).to eq 'message'
+        expect(json['included'].first['id']).to eq Message.last.id.to_s
+        expect(json['included'].first['attributes']['content']).to eq 'helloooo'
+        expect(json['included'].first['attributes']['media']).to eq nil
+        expect(json['included'].first['attributes']['name']).to eq 'Matt'
+      end
+
+      it 'shows the card even when not authenticated' do
+        get "/v1/cards/#{user.cards.first.path}", headers: headers
+        json = JSON.parse(response.body)
+
+        expect(json['included'].size).to be 1
+        expect(json['included'].first['type']).to eq 'message'
+        expect(json['included'].first['id']).to eq Message.last.id.to_s
+        expect(json['included'].first['attributes']['content']).to eq 'helloooo'
+        expect(json['included'].first['attributes']['media']).to eq nil
+        expect(json['included'].first['attributes']['name']).to eq 'Matt'
+      end
     end
 
-    it 'shows the card with messages when authenticated' do
-      get_with_jwt_token("/v1/cards/#{user.cards.first.path}", user)
-      json = JSON.parse(response.body)
+    describe 'Invalid request' do
+      let(:deleted_card) { user.cards.create(title: 'Au revoir', recipient_name: "Ben", owner: user, deleted_at: Time.now) }
 
-      expect(json['included'].size).to be 1
-      expect(json['included'].first['type']).to eq 'message'
-      expect(json['included'].first['id']).to eq Message.last.id.to_s
-      expect(json['included'].first['attributes']['content']).to eq 'helloooo'
-      expect(json['included'].first['attributes']['media']).to eq nil
-      expect(json['included'].first['attributes']['name']).to eq 'Matt'
-    end
-
-    it 'shows the card even when not authenticated' do
-      get "/v1/cards/#{user.cards.first.path}", headers: headers
-      json = JSON.parse(response.body)
-
-      expect(json['included'].size).to be 1
-      expect(json['included'].first['type']).to eq 'message'
-      expect(json['included'].first['id']).to eq Message.last.id.to_s
-      expect(json['included'].first['attributes']['content']).to eq 'helloooo'
-      expect(json['included'].first['attributes']['media']).to eq nil
-      expect(json['included'].first['attributes']['name']).to eq 'Matt'
+      it 'returns 404 for a deleted card' do
+        get "/v1/cards/#{deleted_card.path}", headers: headers
+        expect(response).to have_http_status(:not_found)
+      end
     end
   end
 
@@ -204,9 +216,6 @@ describe 'UsersController' do
     end
 
     describe 'Invalid requests' do
-      # the card does not belong to current user
-      # invalid recipient_name
-      # invalid title
       let(:missing_recipient_name_params) do
         {
           card: {
@@ -251,6 +260,15 @@ describe 'UsersController' do
         expect(json['errors'].first['title']).to eq 'Invalid title'
         expect(json['errors'].first['detail']).to eq "Title can't be blank"
       end
+
+      context 'the card was deleted' do
+        let(:deleted_card) { user.cards.create(title: 'Au revoir', recipient_name: "Ben", owner: user, deleted_at: Time.now) }
+  
+        it 'returns 404 for a deleted card' do
+          put_with_jwt_token("/v1/cards/#{deleted_card.id}", user, valid_params.to_json)
+          expect(response).to have_http_status(:not_found)
+        end
+      end
     end
   end
 
@@ -261,10 +279,16 @@ describe 'UsersController' do
   # TODO: change so that we use deleted_at column
   describe 'DELETE /v1/cards/:id' do
     describe 'Valid requests' do
-      it 'should delete a card' do
+      it 'should not delete any cards' do
         expect do
           delete_with_jwt_token("/v1/cards/#{user.cards.first.id}", user)
-        end.to change { Card.count }
+        end.not_to change { Card.count }
+      end
+
+      it 'should soft delete a card' do
+        expect(user.cards.first.reload.deleted_at).to be_nil
+        delete_with_jwt_token("/v1/cards/#{user.cards.first.id}", user)
+        expect(user.cards.first.reload.deleted_at).not_to be_nil
       end
     end
 
