@@ -9,7 +9,7 @@ class SerializableMessage < JSONAPI::Serializable::Resource
   end
 
   attribute :immediate_update_token do
-    @object.immediate_update_token.to_i
+    @object.immediate_update_token
   end
 
   attribute :immediate_update_token_expired_at do

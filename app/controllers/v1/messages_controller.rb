@@ -6,7 +6,7 @@ module V1
 
     # before_action 
     def create
-      card = Card.not_deleted.find(message_params[:card_id])
+      card = Card.not_deleted.find_by(id: message_params[:card_id])
       unless card
         head(:not_found) and return
       end
@@ -22,15 +22,24 @@ module V1
     end
 
     def update
-      @message = Message.find(update_message_params[:id])
-      authenticate_user! if message_params[:user_id]
-      check_card_not_deleted
-      check_immediate_update_token
+      @message = Message.find_by(id: params[:id])
+      unless @message
+        head(:not_found) and return
+      end
 
-      if message.update(message_params)
-        render jsonapi: message, status: :ok
+      authenticate_user! if message_params[:user_id]
+      unless card_not_deleted
+        head(:not_found) and return
+      end
+
+      unless authenticated_user_owner_of_message || valid_immediate_token
+        head(:unauthorized) and return
+      end
+      
+      if @message.update(message_params)
+        render jsonapi: @message, status: :ok
       else
-        render jsonapi_errors: message.errors, status: :unprocessable_entity
+        render jsonapi_errors: @message.errors, status: :unprocessable_entity
       end
     end
 
@@ -49,15 +58,14 @@ module V1
       params.require(:message).permit(:card_id, :content, :media, :user_id, :name, :immediate_update_token)
     end
 
-    def check_card_not_deleted
-      return if @message.card.deleted_at.nil?
-      head(:not_found) and return
+    def card_not_deleted
+      @message.card.deleted_at.nil?
     end
 
     def check_immediate_update_token
       return if message_params[:user_id] && current_user.id == @message.user_id
-      unless @message.immediate_update_token == update_message_params[:immediate_update_token]
-        && @message.immediate_update_token_expired_at >= Time.now
+      unless @message.immediate_update_token == update_message_params[:immediate_update_token] &&
+        @message.immediate_update_token_expired_at >= Time.now
         head(:unauthorized) and return
       end
     end
@@ -67,6 +75,15 @@ module V1
       unless @message.card.owner == current_user
         head(:unauthorized) and return
       end
+    end
+
+    def authenticated_user_owner_of_message
+      message_params[:user_id] && current_user.id == @message.user_id
+    end
+
+    def valid_immediate_token
+      @message.immediate_update_token == update_message_params[:immediate_update_token] &&
+        @message.immediate_update_token_expired_at >= Time.now
     end
   end
 end
