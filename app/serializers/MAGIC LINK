@@ -1,4 +1,0 @@
-8- messages controller tests
-  - create (everybody, sur creation un immediate_token est renvoye au FE, avec expiration de ce token ~2 hours)
-  - update (on check if immediate_token est le bon. le immediate_token n'est accessible qu'a l'utilisateur qui est toujours sur son pc et est la depuis moins de 2 heures. ce token n'est present que lors de la creation)
-  - destroy is only for owner
