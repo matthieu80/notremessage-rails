@@ -1,4 +1,6 @@
 class Card < ApplicationRecord
+  self.implicit_order_column = "created_at"
+  
   has_many :user_cards
   has_many :users, through: :user_cards
   has_many :messages

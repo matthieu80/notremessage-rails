@@ -13,14 +13,15 @@
 ActiveRecord::Schema.define(version: 2021_11_02_072709) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  create_table "cards", force: :cascade do |t|
+  create_table "cards", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "recipient_name", null: false
     t.string "recipient_email"
     t.string "title", null: false
     t.string "path", null: false
-    t.integer "owner_id", null: false
+    t.uuid "owner_id", null: false
     t.integer "background", default: 1
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -31,7 +32,7 @@ ActiveRecord::Schema.define(version: 2021_11_02_072709) do
   end
 
   create_table "magic_links", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.uuid "user_id", null: false
     t.integer "expired_at", null: false
     t.string "signature", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -39,24 +40,24 @@ ActiveRecord::Schema.define(version: 2021_11_02_072709) do
     t.index ["signature"], name: "index_magic_links_on_signature", unique: true
   end
 
-  create_table "messages", force: :cascade do |t|
-    t.integer "card_id", null: false
+  create_table "messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "card_id", null: false
     t.string "content", null: false
     t.string "media"
-    t.integer "user_id"
+    t.uuid "user_id"
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "user_cards", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "card_id", null: false
+    t.uuid "user_id", null: false
+    t.uuid "card_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", null: false
     t.string "name", null: false
     t.datetime "created_at", precision: 6, null: false

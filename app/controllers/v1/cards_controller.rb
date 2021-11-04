@@ -11,7 +11,6 @@ module V1
         title: card_params[:title],
         owner_id: current_user.id
       )
-
       if card.save
         render jsonapi: card, status: :created
       else
