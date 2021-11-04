@@ -7,16 +7,16 @@ class Card < ApplicationRecord
 
   validates_presence_of :title, :recipient_name, :owner_id
 
-  before_create :generate_public_id
+  before_create :generate_path
 
   scope :not_deleted, -> { where(deleted_at: nil) }
 
-  def generate_public_id
-    return if public_id
+  def generate_path
+    return if path
 
-    self.public_id = loop do
-      public_id = SecureRandom.urlsafe_base64.first(12).downcase
-      break public_id unless Message.where(public_id: public_id).exists?
+    self.path = loop do
+      path = SecureRandom.urlsafe_base64.first(12).downcase
+      break path unless Card.where(path: path).exists?
     end
   end
 end

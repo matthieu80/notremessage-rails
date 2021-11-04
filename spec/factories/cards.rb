@@ -4,5 +4,6 @@ FactoryBot.define do
     recipient_email { 'dwef@dwef.fr'}
     title { 'Great card' }
     association :owner, factory: :user
+    path { 'R4nD0mpAtH' }
   end
 end

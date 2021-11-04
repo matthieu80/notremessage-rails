@@ -139,7 +139,7 @@ describe 'UsersController' do
   end
 
 #
-## SHOW
+## SHOW (IMPORTANT NOTE: use `:path` instead of `:id`)
 #
 
   describe 'GET /v1/cards/:id' do
@@ -148,7 +148,7 @@ describe 'UsersController' do
     end
 
     it 'shows the card with messages when authenticated' do
-      get_with_jwt_token("/v1/cards/#{user.cards.first.id}", user)
+      get_with_jwt_token("/v1/cards/#{user.cards.first.path}", user)
       json = JSON.parse(response.body)
 
       expect(json['included'].size).to be 1
@@ -160,7 +160,7 @@ describe 'UsersController' do
     end
 
     it 'shows the card even when not authenticated' do
-      get "/v1/cards/#{user.cards.first.id}", headers: headers
+      get "/v1/cards/#{user.cards.first.path}", headers: headers
       json = JSON.parse(response.body)
 
       expect(json['included'].size).to be 1

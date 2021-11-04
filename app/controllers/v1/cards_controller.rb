@@ -21,19 +21,19 @@ module V1
 
     # dashboard
     def index
-      cards = current_user.owned_cards
+      cards = current_user.owned_cards.not_deleted
       render jsonapi: cards, status: :ok
     end
 
     def show
-      card = Card.find(params[:id])
+      card = Card.not_deleted.where(path: params[:path]).first
       render jsonapi: card,
         include: [:messages],
         status: :ok
     end
 
     def update
-      card = current_user.cards.find_by(id: params[:id])
+      card = current_user.cards.not_deleted.find_by(id: params[:id])
       unless card
        head(:not_found) and return
       end
@@ -51,7 +51,7 @@ module V1
     end
 
     def destroy
-      current_user.cards.find_by(id: params[:id]).try(:destroy)
+      current_user.cards.not_deleted.find_by(id: params[:id]).try(:destroy)
       head :no_content
     end
 

@@ -11,5 +11,18 @@ RSpec.describe Card, type: :model do
   # validations
   it { should validate_presence_of(:title) }
   it { should validate_presence_of(:recipient_name) }
-  # it { should validate_presence_of(:recipient_email) }
+
+  describe '#generate_path' do
+    it 'generates a path on creation' do
+      user = create(:user)
+      card = Card.create(
+        recipient_name: 'Ben',
+        group_name: 'collegues',
+        title: 'au revoir',
+        owner_id: user.id
+      )
+
+      expect(card.path).not_to be_nil
+    end
+  end
 end

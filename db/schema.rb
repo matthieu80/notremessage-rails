@@ -19,15 +19,15 @@ ActiveRecord::Schema.define(version: 2021_11_02_072709) do
     t.string "recipient_name", null: false
     t.string "recipient_email"
     t.string "title", null: false
+    t.string "path", null: false
     t.integer "owner_id", null: false
     t.integer "background", default: 1
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "group_name"
-    t.string "public_id", null: false
     t.datetime "deleted_at"
     t.index ["owner_id"], name: "index_cards_on_owner_id"
-    t.index ["public_id"], name: "index_cards_on_public_id", unique: true
+    t.index ["path"], name: "index_cards_on_path"
   end
 
   create_table "magic_links", force: :cascade do |t|
@@ -47,8 +47,6 @@ ActiveRecord::Schema.define(version: 2021_11_02_072709) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "public_id", null: false
-    t.index ["public_id"], name: "index_messages_on_public_id", unique: true
   end
 
   create_table "user_cards", force: :cascade do |t|
