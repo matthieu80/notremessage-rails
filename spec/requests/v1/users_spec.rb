@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'UsersController' do
-  let!(:user) { create(:user) }
+  let!(:user) { create(:user, :with_a_card) }
 
   describe 'GET /v1/users/:id' do
     describe 'Valid requests' do

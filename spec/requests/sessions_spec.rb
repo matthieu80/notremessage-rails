@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'devise/jwt/test_helpers'
 
 describe 'SessionsController' do
-  let!(:user) { create(:user) }
+  let!(:user) { create(:user, :with_a_card) }
 
   describe '/users/sign_in' do
     describe 'Valid requests' do

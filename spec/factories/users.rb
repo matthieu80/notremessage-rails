@@ -4,8 +4,10 @@ FactoryBot.define do
     name  { 'Matt' }
     password { 'password' }
 
-    after(:create) do |user|
-      user.cards << create(:card, owner: user)
+    trait :with_a_card do
+      after(:create) do |user|
+        user.cards << create(:card, owner: user)
+      end
     end
   end
 end

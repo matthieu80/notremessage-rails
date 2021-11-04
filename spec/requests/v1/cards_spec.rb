@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe 'UsersController' do
-  let!(:user) { create(:user) }
-  let!(:other_user) { create(:user, email: 'otheruser@email.com') }
+  let!(:user) { create(:user, :with_a_card) }
+  let!(:other_user) { create(:user, :with_a_card, email: 'otheruser@email.com') }
 
 #
 ## CREATE
