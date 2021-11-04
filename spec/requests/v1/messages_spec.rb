@@ -295,7 +295,6 @@ describe 'UsersController' do
           put "/v1/messages/#{message.id}", params: missing_message_attributes_params.to_json, headers: headers
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response).to have_http_status(:unprocessable_entity)
-          p response.body
           json = JSON.parse(response.body)
 
           expect(json['errors'].size).to be 1
@@ -307,9 +306,34 @@ describe 'UsersController' do
   end
 
   describe 'DELETE /v1/messages/:id' do
-    # valid
-      # only card owner can destroy message
-    # user not the owner
-      # -> message not deleted, returning 401
+    let!(:user) { create(:user, :with_a_card) }
+    let!(:other_user) { create(:user, :with_a_card, email: 'otheremail@email.com') }
+    let(:message) { create(:message, card_id: user.cards.first.id, user: user) }
+
+    describe 'Valid requests' do
+      it 'returns 204' do
+        delete_with_jwt_token "/v1/messages/#{message.id}", user
+        expect(response).to have_http_status(:no_content)
+      end
+
+      it 'destroys the message' do
+        expect do
+          delete_with_jwt_token "/v1/messages/#{message.id}", user
+        end.to change { Message.where(id: message.id).count }.from(1).to(0)
+      end
+    end
+
+    describe 'Invalid requests' do
+      it 'returns 204' do
+        delete_with_jwt_token "/v1/messages/#{message.id}", other_user
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it '' do
+        expect do
+          delete_with_jwt_token "/v1/messages/#{message.id}", other_user
+        end.not_to change { Message.where(id: message.id).count }
+      end
+    end
   end
 end

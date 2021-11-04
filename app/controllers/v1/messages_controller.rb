@@ -72,7 +72,7 @@ module V1
 
     def authorize_owner!
       @message = Message.find_by(id: params[:id])
-      unless @message.card.owner == current_user
+      unless @message && @message.card.owner == current_user
         head(:unauthorized) and return
       end
     end
