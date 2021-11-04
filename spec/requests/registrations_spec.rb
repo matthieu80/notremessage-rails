@@ -12,40 +12,84 @@ describe 'RegistrationsController' do
         title: "my card",
         recipient_name: "joe",
         group_name: "your colleagues"
-      }
+      },
+      with_card: true
     }
   end
 
   describe '/users' do
     describe 'Valid requests' do
-      it 'should return an Authorization headers' do
-        post '/users', params: valid_params.to_json, headers: headers
-        expect(response).to have_http_status(:created)
+      context 'with with_card set to true' do
+        it 'should return an Authorization headers' do
+          post '/users', params: valid_params.to_json, headers: headers
+          expect(response).to have_http_status(:created)
+        end
+
+        it 'returns the user and card' do
+          post '/users', params: valid_params.to_json, headers: headers
+          json = JSON.parse(response.body)
+
+          expect(json['included'].size).to be 1
+          expect(json['data']['type']).to eq 'user'
+          expect(json['data']['id']).to eq User.last.id
+          expect(json['data']['attributes']['email']).to eq User.last.email
+          expect(json['included'].first['type']).to eq 'card'
+          expect(json['included'].first['attributes']['title']).to eq 'my card'
+        end
+
+        it 'should return an Authorization headers' do
+          post '/users', params: valid_params.to_json, headers: headers
+          expect(response.headers['Authorization']).not_to be_empty
+        end
+
+        it 'should return an Authorization headers starting with Bearer' do
+          post '/users', params: valid_params.to_json, headers: headers
+          expect(/^Bearer /.match(response.headers['Authorization'])).not_to be_nil
+        end
+
+        it 'should create the user with a jti attribute non-nil' do
+          post '/users', params: valid_params.to_json, headers: headers
+          jtw = response.headers['Authorization']
+          expect(User.last.jti).not_to be_empty
+        end
+
+        it 'should create a card with right attributes' do
+          post '/users', params: valid_params.to_json, headers: headers
+          created_card = User.last.cards.first
+
+          expect(created_card.title).to eq valid_params[:card][:title]
+          expect(created_card.recipient_name).to eq valid_params[:card][:recipient_name]
+          expect(created_card.group_name).to eq valid_params[:card][:group_name]
+        end
       end
 
-      it 'should return an Authorization headers' do
-        post '/users', params: valid_params.to_json, headers: headers
-        expect(response.headers['Authorization']).not_to be_empty
-      end
+      context 'with with_card set to false' do
+        it 'respond with 201' do
+          post '/users', params: valid_params.merge({with_card: false}).to_json, headers: headers
+          expect(response).to have_http_status(:created)
+        end
 
-      it 'should return an Authorization headers starting with Bearer' do
-        post '/users', params: valid_params.to_json, headers: headers
-        expect(/^Bearer /.match(response.headers['Authorization'])).not_to be_nil
-      end
+        it 'returns the user only, no card was created' do
+          post '/users', params: valid_params.merge({with_card: false}).to_json, headers: headers
+          json = JSON.parse(response.body)
 
-      it 'should create the user with a jti attribute non-nil' do
-        post '/users', params: valid_params.to_json, headers: headers
-        jtw = response.headers['Authorization']
-        expect(User.last.jti).not_to be_empty
-      end
+          expect(json['data']['type']).to eq 'user'
+          expect(json['data']['id']).to eq User.last.id
+          expect(json['data']['attributes']['email']).to eq User.last.email
+          expect(json['included']).to be nil
+        end
 
-      it 'should create a card with right attributes' do
-        post '/users', params: valid_params.to_json, headers: headers
-        created_card = User.last.cards.first
+        it 'should create a user' do
+          expect do
+            post '/users', params: valid_params.merge({with_card: false}).to_json, headers: headers
+          end.to change { User.count }.by(1)
+        end
 
-        expect(created_card.title).to eq valid_params[:card][:title]
-        expect(created_card.recipient_name).to eq valid_params[:card][:recipient_name]
-        expect(created_card.group_name).to eq valid_params[:card][:group_name]
+        it 'should not create a card' do
+          expect do
+            post '/users', params: valid_params.merge({with_card: false}).to_json, headers: headers
+          end.not_to change { Card.count }
+        end
       end
     end
 
@@ -76,7 +120,8 @@ describe 'RegistrationsController' do
               title: "my card",
               recipient_name: "joe",
               group_name: "your colleagues"
-            }
+            },
+            with_card: true
           }
         end
 
@@ -106,7 +151,8 @@ describe 'RegistrationsController' do
             card: {
               recipient_name: "joe",
               group_name: "your colleagues"
-            }
+            },
+            with_card: true
           }
         end
 
@@ -144,7 +190,8 @@ describe 'RegistrationsController' do
             card: {
               recipient_name: "joe",
               group_name: "your colleagues"
-            }
+            },
+            with_card: true
           }
         end
 

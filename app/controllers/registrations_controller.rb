@@ -8,26 +8,18 @@ class RegistrationsController < Devise::RegistrationsController
   def create
     build_resource(sign_up_params)
     @card = nil
-    create_user_and_card!
+
+    create_user_and_card! if params[:with_card]
+    resource.save if !params[:with_card]
 
     yield resource if block_given?
     
-    if resource.persisted? && resource.cards.first
-      if resource.active_for_authentication?
-        sign_up(resource_name, resource)
-        render jsonapi: resource,
-          include: [:cards],
-          fields: { users: [:name, :email] },
-          status: :created
-      else
-        expire_data_after_sign_in!
-        render json: {status: 200}
-      end
+    if params[:with_card]
+      render_new_user_with_card_or_error
     else
-      clean_up_passwords resource
-      set_minimum_password_length
-      render jsonapi_errors: errors, status: :unprocessable_entity
+      render_new_user_or_error
     end
+
   end
 
   protected
@@ -58,6 +50,43 @@ class RegistrationsController < Devise::RegistrationsController
       @card.errors
     else
       resource.errors
+    end
+  end
+
+  def render_new_user_with_card_or_error
+    if resource.persisted? && resource.cards.first
+      if resource.active_for_authentication?
+        sign_up(resource_name, resource)
+        render jsonapi: resource,
+          include: [:cards],
+          fields: { users: [:name, :email] },
+          status: :created
+      else
+        expire_data_after_sign_in!
+        render json: {status: 200}
+      end
+    else
+      clean_up_passwords resource
+      set_minimum_password_length
+      render jsonapi_errors: errors, status: :unprocessable_entity
+    end
+  end
+
+  def render_new_user_or_error
+    if resource.persisted?
+      if resource.active_for_authentication?
+        sign_up(resource_name, resource)
+        render jsonapi: resource,
+          fields: { users: [:name, :email] },
+          status: :created
+      else
+        expire_data_after_sign_in!
+        render json: {status: 200}
+      end
+    else
+      clean_up_passwords resource
+      set_minimum_password_length
+      render jsonapi_errors: resource.errors, status: :unprocessable_entity
     end
   end
 end
