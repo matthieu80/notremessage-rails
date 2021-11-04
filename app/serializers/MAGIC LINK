@@ -2,6 +2,3 @@
   - create (everybody, sur creation un immediate_token est renvoye au FE, avec expiration de ce token ~2 hours)
   - update (on check if immediate_token est le bon. le immediate_token n'est accessible qu'a l'utilisateur qui est toujours sur son pc et est la depuis moins de 2 heures. ce token n'est present que lors de la creation)
   - destroy is only for owner
-
-10- we should be able to create a user without a card created directly (if somebody writes on a card and signs up, they do not need a card at that point) TODO2 (change factory to 'user_with_card' trait and change specs)
-- dans registration, changer le signup pour qu'un nouveau parametre 'with_card' soit ajouter (verifier sur thankbox si ya pas un meilleur moyen de faire ca)

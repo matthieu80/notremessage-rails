@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_02_072709) do
+ActiveRecord::Schema.define(version: 2021_11_04_074051) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -48,6 +48,8 @@ ActiveRecord::Schema.define(version: 2021_11_02_072709) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "immediate_update_token"
+    t.datetime "immediate_update_token_expired_at"
   end
 
   create_table "user_cards", force: :cascade do |t|
