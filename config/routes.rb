@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   devise_scope :user do
     post '/magic_links', to: 'sessions#send_magic_link_email'
     get '/magic_links/verify', to: 'sessions#magic_link_verify'
+    post '/gmail', to: 'sessions#gmail'
   end
 
   # API V1

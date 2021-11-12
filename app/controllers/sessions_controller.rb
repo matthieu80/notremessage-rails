@@ -14,6 +14,20 @@ class SessionsController < Devise::SessionsController
       status: :created
   end
 
+  def gmail
+    existing_user = User.find_by(email: gmail_params[:email])
+    if existing_user
+      signin_and_render_user(existing_user)
+    else
+      new_user = User.new(gmail_params.merge({password: SecureRandom.uuid, confirmed_at: Time.now}))
+      if new_user.save
+        signin_and_render_user(new_user)
+      else
+        render jsonapi_errors: new_user.errors, status: :unprocessable_entity
+      end
+    end
+  end
+
   # used when user wants a new magic link, email will be sent
   # only param: email
   def send_magic_link_email
@@ -50,5 +64,17 @@ class SessionsController < Devise::SessionsController
 
   def magic_link_params
     params.require(:user).permit(:email)
+  end
+
+  def gmail_params
+    params.require(:user).permit(:email, :name)
+  end
+
+  def signin_and_render_user(user)
+    sign_in(User, user)
+    render jsonapi: user,
+      include: [:cards],
+      fields: { users: [:name, :email] },
+      status: :created
   end
 end

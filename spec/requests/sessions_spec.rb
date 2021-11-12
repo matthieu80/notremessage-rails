@@ -222,4 +222,92 @@ describe 'SessionsController' do
       end
     end
   end
+
+  #
+  ## GMAIL
+  #
+
+  describe 'POST /magic_links' do
+    context 'User does not exist yet' do
+      describe 'Valid request' do
+        let(:params) do
+          { 
+            user: {
+              email: 'great_email@email.com',
+              name: 'matt'
+            }
+          }
+        end
+
+        it 'returns 201' do
+          post "/gmail", params: params.to_json, headers: headers
+          expect(response).to have_http_status(:created)
+        end
+
+        it 'creates a new user' do
+          expect do
+            post "/gmail", params: params.to_json, headers: headers
+          end.to change { User.count }.by(1)
+        end
+
+        it 'creates a new user' do
+          post "/gmail", params: params.to_json, headers: headers
+          expect(User.last.jti).not_to be_nil
+        end
+
+        it 'should return an Authorization headers' do
+          post "/gmail", params: params.to_json, headers: headers
+          expect(response.headers['Authorization']).not_to be_empty
+        end
+  
+        it 'does NOT enqueue mailer job' do
+          expect do
+            post "/magic_links", params: params.to_json, headers: headers
+          end.not_to change { ActionMailer::Base.deliveries.count }
+        end
+      end
+    end
+
+    context 'User already exist' do
+      let!(:user) { create(:user) }
+
+      describe 'Valid request' do
+        let(:params) do
+          { 
+            user: {
+              email: 'email@email.com',
+              name: 'matt'
+            }
+          }
+        end
+
+        it 'returns 201' do
+          post "/gmail", params: params.to_json, headers: headers
+          expect(response).to have_http_status(:created)
+        end
+
+        it 'creates a new user' do
+          expect do
+            post "/gmail", params: params.to_json, headers: headers
+          end.not_to change { User.count }
+        end
+
+        it 'creates a new user' do
+          post "/gmail", params: params.to_json, headers: headers
+          expect(User.last.jti).not_to be_nil
+        end
+
+        it 'should return an Authorization headers' do
+          post "/gmail", params: params.to_json, headers: headers
+          expect(response.headers['Authorization']).not_to be_empty
+        end
+  
+        it 'does NOT enqueue mailer job' do
+          expect do
+            post "/magic_links", params: params.to_json, headers: headers
+          end.not_to change { ActionMailer::Base.deliveries.count }
+        end
+      end
+    end
+  end
 end

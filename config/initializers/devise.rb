@@ -13,10 +13,12 @@ Devise.setup do |config|
   config.jwt do |jwt|
     jwt.secret = Rails.application.credentials.fetch(:secret_key_base)
     jwt.dispatch_requests = [
+      ['POST', %r{/gmail}],
       ['POST', %r{^/users$}],
       ['POST', %r{^/login$}],
       ['PUT', %r{^/users/password}],
-      ['GET', %r{/verify}]
+      ['GET', %r{/verify}],
+      
     ]
     jwt.revocation_requests = [
       ['DELETE', %r{^/logout$}]
